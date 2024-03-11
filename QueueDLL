@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure for doubly linked list
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+
+struct Node* front = NULL;
+struct Node* rear = NULL;
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to check if the queue is empty
+int isEmpty() {
+    return front == NULL;
+}
+
+// Function to add an element to the queue (enqueue)
+void enqueue(int data) {
+    struct Node* newNode = createNode(data);
+    
+    if (rear == NULL) {
+        front = rear = newNode;
+        return;
+    }
+    
+    rear->next = newNode;
+    newNode->prev = rear;
+    rear = newNode;
+}
+
+// Function to remove an element from the queue (dequeue)
+void dequeue() {
+    if (isEmpty()) {
+        printf("Queue is empty.\n");
+        return;
+    }
+    
+    struct Node* temp = front;
+    front = front->next;
+    
+    if (front == NULL) {
+        rear = NULL;
+    } else {
+        front->prev = NULL;
+    }
+    
+    free(temp);
+}
+
+// Function to display the queue
+void display() {
+    struct Node* temp = front;
+    
+    if (isEmpty()) {
+        printf("Queue is empty.\n");
+        return;
+    }
+    
+    printf("Queue elements: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    // Example usage
+    enqueue(10);
+    enqueue(20);
+    enqueue(30);
+    
+    display();
+    
+    dequeue();
+    
+    display();
+    
+    return 0;
+}
